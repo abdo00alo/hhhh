@@ -1,3 +1,127 @@
+from fake_useragent import UserAgent
+import threading
+import string
+from telebot import types
+import telebot
+import re
+import os
+import json
+import sys
+import hashlib
+import random
+from datetime import datetime, timedelta
+import requests
+import base64
+import xml.etree.ElementTree as ET
+import time
+from urllib.parse import quote_plus
+import ast
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+ua = UserAgent()
+random_user_agent = ua.random
+print('Start Boot >>>>>>>')
+bot = telebot.TeleBot("7904044703:AAGsbQjBQR7-6c_xdq4Z8ACf1dB4zfr3swo")
+user_data = {}
+ADMIN_USER_ID = 1180925062
+#data = "/storage/emulated/0/data/"
+#user_ids_file = os.path.join(data, "user_ids.json")
+user_ids_file ={} 
+if user_ids_file:
+    user_ids = user_ids_file
+else:
+    user_ids = []
+waiting_for_message = {}
+CHANNEL_USERNAMES = ['@teamabghafour7771','@python_char_89']
+#CHANNEL_USERNAMES = ['@python_char_89']
+
+def is_subscribed(user_id):
+    try:
+        for channel_username in CHANNEL_USERNAMES:
+            chat_member = bot.get_chat_member(channel_username, user_id)
+            if chat_member.status not in ['member', 'administrator', 'creator']:
+                return False        
+        return True
+    except Exception as e:
+        pass
+        return False
+
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    global st
+    user_id = message.from_user.id
+    username = message.from_user.username
+    first_name = message.from_user.first_name
+
+    if is_subscribed(user_id):
+        # التحقق مما إذا كان المستخدم موجودًا في القائمة
+        if user_id not in user_ids:
+            user_ids.append(user_id)  # إضافة المستخدم إلى القائمة
+            
+            # جلب الصورة الشخصية
+            photos = bot.get_user_profile_photos(user_id)
+            if photos.total_count > 0:
+                file_id = photos.photos[0][0].file_id  # الحصول على أول صورة
+                bot.send_photo(
+                    ADMIN_USER_ID,
+                    file_id,
+                    caption=f"New User:\nName: {first_name}\nUsername: @{username}\nID: {user_id}"
+                )
+            else:
+                # إذا لم يكن هناك صورة
+                bot.send_message(
+                    ADMIN_USER_ID,
+                    f"New User:\nName: {first_name}\nUsername: @{username}\nID: {user_id}\n(No profile picture)"
+                )
+
+
+        
+        markup = types.InlineKeyboardMarkup()
+        btn10 = types.InlineKeyboardButton('نت مجاني', callback_data='free')
+        btn20 = types.InlineKeyboardButton('خدمات أخرى', callback_data='other')
+        btn3 = types.InlineKeyboardButton('المطور', url='https://t.me/Abdo_1907_A3')
+        markup.add(btn10)
+        markup.add(btn20)
+        markup.add(btn3)
+        st = bot.send_message(message.chat.id, "اختار نوع الخدمه🔥❤️‍🩹", reply_markup=markup)
+    else:
+        markup = types.InlineKeyboardMarkup()
+        btn4 = types.InlineKeyboardButton('اشتراك', url='https://t.me/teamabghafour7771')
+        btn6 = types.InlineKeyboardButton('اشتراك', url='https://t.me/python_char_89')
+        markup.add(btn4, btn6)
+        
+        bot.send_message(message.chat.id, "يجب الاشتراك في قنوات البوت لاستخدامه\n\nبعد الاشتراك أرسل /start", reply_markup=markup)
+
+ 
+
+@bot.callback_query_handler(func=lambda call: call.data == 'free')
+def handle_free(call):
+    user_id = call.from_user.id
+    if is_subscribed(user_id):
+        chat_id = call.message.chat.id
+        markup = types.InlineKeyboardMarkup()
+        btn1 = types.InlineKeyboardButton('Orange', callback_data='orange')
+        btn2 = types.InlineKeyboardButton('Etisalat', callback_data='etisalat')
+        markup.add(btn1)
+        markup.add(btn2)
+        bot.edit_message_text(
+        chat_id=chat_id,
+        message_id=call.message.message_id,
+        text="ختار نوع الخدمه🔥❤️‍🩹",
+        reply_markup=markup
+    )
+    else:
+        markup = types.InlineKeyboardMarkup()
+        btn4 = types.InlineKeyboardButton('اشتراك', url='https://t.me/abdelgaf777771')
+        btn5 = types.InlineKeyboardButton('اشتراك', url='https://t.me/t_e_a_m_dark1')
+        btn6 = types.InlineKeyboardButton('اشتراك', url='https://t.me/python_char_89')
+        markup.add(btn4, btn5, btn6)
+        bot.send_message(call.message.chat.id, "يجب الاشتراك في قنوات البوت لاستخدام هذه الخدمة.\n\nبعد الاشتراك اضغط /start", reply_markup=markup) 
+
+
+#&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
 
 @bot.callback_query_handler(func=lambda call: call.data == 'orange')
 def handle_orange(call):
