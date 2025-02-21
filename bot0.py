@@ -1,39 +1,3 @@
-from fake_useragent import UserAgent
-import threading
-import string
-from telebot import types
-import telebot
-import re
-import os
-import json
-import sys
-import hashlib
-import random
-from datetime import datetime, timedelta
-import requests
-import base64
-import xml.etree.ElementTree as ET
-import time
-from urllib.parse import quote_plus
-import ast
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-
-ua = UserAgent()
-random_user_agent = ua.random
-print('Start Boot >>>>>>>')
-bot = telebot.TeleBot("7904044703:AAGsbQjBQR7-6c_xdq4Z8ACf1dB4zfr3swo")
-user_data = {}
-ADMIN_USER_ID = 1180925062
-#data = "/storage/emulated/0/data/"
-#user_ids_file = os.path.join(data, "user_ids.json")
-user_ids_file ={} 
-if user_ids_file:
-    user_ids = user_ids_file
-else:
-    user_ids = []
-waiting_for_message = {}
-CHANNEL_USERNAMES = ['@teamabghafour7771','@python_char_89']
-#CHANNEL_USERNAMES = ['@python_char_89']
 
 def is_subscribed(user_id):
     try:
